@@ -1,0 +1,15 @@
+{
+  "name": "anndata",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c green,cyan \"npm run dev --workspace anndata-backend\" \"npm run dev --workspace anndata-frontend\"",
+    "build": "npm run build --workspace anndata-frontend",
+    "start": "npm run start --workspace anndata-backend",
+    "seed": "npm run seed --workspace anndata-backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
