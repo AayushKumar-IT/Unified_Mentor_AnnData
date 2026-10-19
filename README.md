@@ -9,7 +9,7 @@ AnnDaata is a farmer-to-consumer marketplace that helps shoppers discover fresh 
 - [Requirements](#requirements)
 - [Quick start without Docker](#quick-start-without-docker)
 - [Optional: use Docker for PostgreSQL](#optional-use-docker-for-postgresql)
-- [Application URLs and accounts](#application-urls-and-accounts)
+- [Application URLs](#application-urls)
 - [Project commands](#project-commands)
 - [Project structure](#project-structure)
 - [Database and uploaded files](#database-and-uploaded-files)
@@ -135,7 +135,7 @@ docker compose up -d db
 
 Docker Compose runs PostgreSQL on port `5433`. Set `DATABASE_URL` in `backend/.env` to the Docker database URL shown in `backend/.env.example`, then continue from step 3 in the quick start.
 
-## Application URLs and accounts
+## Application URLs
 
 With the default development ports:
 
@@ -146,13 +146,6 @@ With the default development ports:
 | API base URL | `http://localhost:5000/api/v1` |
 
 The API port is controlled by `PORT` in `backend/.env`. If you change it, set `VITE_API_URL` in `frontend/.env.local` to the matching API base URL, for example `http://localhost:5001/api/v1`.
-
-The seed script ensures this **development-only** administrator account can log in. Each time you run the seed script, it sets the admin email and password below. You can optionally set `ADMIN_EMAIL` in `backend/.env` to use a different email for your local development account.
-
-- Email: `admin@anndata.com`
-- Password: `Admin@1234`
-
-Use the account to open the admin overview and review farmer applications. This development password is reset whenever the seed script runs; change it before deployment.
 
 Farmers and shoppers can register through the web application. New farmer profiles remain pending until an administrator approves them.
 
@@ -178,29 +171,29 @@ For SQL commands and examples to inspect application records, see [DATA_COMMANDS
 
 ```text
 .
-â”œâ”€â”€ backend/
-â”‚   â”œâ”€â”€ config/          # PostgreSQL and Sequelize configuration
-â”‚   â”œâ”€â”€ controllers/     # Request handlers and business logic
-â”‚   â”œâ”€â”€ middleware/      # Authentication, authorization, and error handling
-â”‚   â”œâ”€â”€ models/          # Sequelize models and relationships
-â”‚   â”œâ”€â”€ routes/          # REST API routes
-â”‚   â”œâ”€â”€ uploads/         # Product photos uploaded during development
-â”‚   â”œâ”€â”€ .env.example     # Backend environment template
-â”‚   â”œâ”€â”€ seeder.js        # Development categories and administrator seed
-â”‚   â””â”€â”€ server.js        # Express application and startup
-â”œâ”€â”€ frontend/
-â”‚   â”œâ”€â”€ public/          # Static assets
-â”‚   â””â”€â”€ src/
-â”‚       â”œâ”€â”€ assets/
-â”‚       â”œâ”€â”€ components/  # Shared UI components
-â”‚       â”œâ”€â”€ context/     # Authentication and cart state
-â”‚       â”œâ”€â”€ hooks/
-â”‚       â”œâ”€â”€ pages/       # Consumer, farmer, admin, and auth screens
-â”‚       â”œâ”€â”€ services/    # API client and service methods
-â”‚       â””â”€â”€ utils/
-â”œâ”€â”€ docker-compose.yml
-â”œâ”€â”€ DATA_COMMANDS.md
-â””â”€â”€ README.md
+|-- backend/
+|   |-- config/          # PostgreSQL and Sequelize configuration
+|   |-- controllers/     # Request handlers and business logic
+|   |-- middleware/      # Authentication, authorization, and error handling
+|   |-- models/          # Sequelize models and relationships
+|   |-- routes/          # REST API routes
+|   |-- uploads/         # Product photos uploaded during development
+|   |-- .env.example     # Backend environment template
+|   |-- seeder.js        # Development categories and administrator seed
+|   \-- server.js        # Express application and startup
+|-- frontend/
+|   |-- public/          # Static assets
+|   \-- src/
+|       |-- assets/
+|       |-- components/  # Shared UI components
+|       |-- context/     # Authentication and cart state
+|       |-- hooks/
+|       |-- pages/       # Consumer, farmer, admin, and auth screens
+|       |-- services/    # API client and service methods
+|       \-- utils/
+|-- docker-compose.yml
+|-- DATA_COMMANDS.md
+\-- README.md
 ```
 
 ## Database and uploaded files
@@ -250,9 +243,3 @@ The unversioned `GET /api/health` endpoint reports whether the API process is ru
 - Confirm the API is running and open `http://localhost:5000/api/health` (adjust the port if `PORT` was changed).
 - Ensure `VITE_API_URL` in `frontend/.env.local`, if set, matches the API port and ends in `/api/v1`.
 - Restart the Vite development server after changing frontend environment variables.
-
-### Admin login does not work
-
-- Run `npm --prefix backend run seed` from the project root with the correct database configured in `backend/.env`.
-- Running the seed script sets the development admin email and password shown in Application URLs and accounts. If `ADMIN_EMAIL` is set, it uses that address instead of the default.
-- Confirm that you are signing into the same database that the running API uses.
