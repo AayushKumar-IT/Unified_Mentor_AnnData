@@ -7,8 +7,7 @@ AnnDaata is a farmer-to-consumer marketplace that helps shoppers discover fresh 
 - [Features](#features)
 - [Technology stack](#technology-stack)
 - [Requirements](#requirements)
-- [Quick start without Docker](#quick-start-without-docker)
-- [Optional: use Docker for PostgreSQL](#optional-use-docker-for-postgresql)
+- [Quick start](#quick-start)
 - [Application URLs](#application-urls)
 - [Project commands](#project-commands)
 - [Project structure](#project-structure)
@@ -55,11 +54,10 @@ AnnDaata is a farmer-to-consumer marketplace that helps shoppers discover fresh 
 - Node.js 20.19 or newer
 - npm (included with Node.js)
 - PostgreSQL 14 or newer
-- Docker Desktop is optional (only needed if you want Docker to run PostgreSQL)
 
-## Quick start without Docker
+## Quick start
 
-This is the recommended setup if Docker is not installed. You need PostgreSQL installed and running on your computer. Run commands in your IDE's terminal (for example, **Terminal > New Terminal** in VS Code), from the project root - the folder containing this `README.md`.
+You need PostgreSQL installed and running on your computer. Run commands in your IDE's terminal (for example, **Terminal > New Terminal** in VS Code), from the project root - the folder containing this `README.md`.
 
 ### 1. Install and start PostgreSQL
 
@@ -125,16 +123,6 @@ npm --prefix frontend run dev
 
 Keep both terminals open while using the app. Open the **Local** address printed in Terminal 2 in your browser (usually `http://localhost:5173`).
 
-## Optional: use Docker for PostgreSQL
-
-You do not need Docker if you followed the quick start above. If you prefer Docker, install and start Docker Desktop, then run this command from the project root:
-
-```sh
-docker compose up -d db
-```
-
-Docker Compose runs PostgreSQL on port `5433`. Set `DATABASE_URL` in `backend/.env` to the Docker database URL shown in `backend/.env.example`, then continue from step 3 in the quick start.
-
 ## Application URLs
 
 With the default development ports:
@@ -162,10 +150,6 @@ Run these from the repository root unless the command says otherwise:
 | `npm --prefix frontend run build` | Create the frontend production build in `frontend/dist` |
 | `npm --prefix backend start` | Start the backend API without watch mode |
 | `npm --prefix backend run seed` | Ensure database tables, default categories, and the development admin exist |
-| `docker compose up -d db` | (Optional) Start PostgreSQL with Docker |
-| `docker compose down` | (Optional) Stop the Docker Compose services (keeps the named database volume) |
-
-For SQL commands and examples to inspect application records, see [DATA_COMMANDS.md](./DATA_COMMANDS.md).
 
 ## Project structure
 
@@ -191,8 +175,6 @@ For SQL commands and examples to inspect application records, see [DATA_COMMANDS
 |       |-- pages/       # Consumer, farmer, admin, and auth screens
 |       |-- services/    # API client and service methods
 |       \-- utils/
-|-- docker-compose.yml
-|-- DATA_COMMANDS.md
 \-- README.md
 ```
 
@@ -201,8 +183,6 @@ For SQL commands and examples to inspect application records, see [DATA_COMMANDS
 The backend reads its PostgreSQL connection from `DATABASE_URL` in `backend/.env`. The main relational tables are `users`, `farmers`, `categories`, `products`, `orders`, `order_items`, `saved_addresses`, and `reviews`. Sequelize creates missing tables at API startup for local development.
 
 Product photo files are written to `backend/uploads`; product records store their file paths. These local uploads are suitable for development. Use durable object storage for deployment.
-
-The Docker Compose database persists in the named `anndata-postgres-data` volume. Stopping the containers does not delete the volume. Avoid `docker compose down -v` unless you intentionally want to delete the local database volume and its data.
 
 ## API overview
 
@@ -224,7 +204,7 @@ The unversioned `GET /api/health` endpoint reports whether the API process is ru
 
 - Replace the development administrator credentials and use a strong, unique `JWT_SECRET`.
 - Configure `FRONTEND_URL` to the deployed frontend origin and configure database TLS/SSL as required by the provider.
-- Do not use the example Docker password in production. Protect environment variables and database backups.
+- Protect environment variables and database backups.
 - Use reviewed database migrations for production schema changes; automatic Sequelize synchronization is intended for local development.
 - Configure durable object storage for uploaded product images.
 - Add appropriate monitoring, backups, and operational error reporting before public deployment.
@@ -236,7 +216,6 @@ The unversioned `GET /api/health` endpoint reports whether the API process is ru
 - Confirm PostgreSQL is running and reachable.
 - Check that `backend/.env` exists and that `DATABASE_URL` points to the correct database and port.
 - Confirm `JWT_SECRET` is configured.
-- For Docker, use `docker compose ps` to check the database container and review its logs with `docker compose logs db`.
 
 ### The browser cannot reach the API
 
