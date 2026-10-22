@@ -4,7 +4,11 @@ import connectDB, { sequelize } from './config/db.js';
 import { Category, User } from './models/index.js';
 
 const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase() || 'admin@anndata.com';
-const adminPassword = 'Admin@1234';
+const adminPassword = process.env.ADMIN_PASSWORD;
+
+if (!adminPassword) {
+  throw new Error('ADMIN_PASSWORD is required');
+}
 
 const seed = async () => {
   await connectDB();
@@ -32,7 +36,7 @@ const seed = async () => {
       role: 'admin'
     });
   }
-  console.log(`Seed complete. Admin login: ${adminEmail} / ${adminPassword}`);
+  console.log(`Seed complete. Admin account: ${adminEmail}`);
 };
 
 seed()
